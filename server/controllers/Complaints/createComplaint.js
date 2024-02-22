@@ -4,7 +4,18 @@ const database = "Complaints"
 
 exports.createComplaint = async (req, res) => {
   try {
-    const { description, address, image, userId, category } = req.body
+    const {
+      name,
+      description,
+      address,
+      state,
+      imageUrl,
+      userId,
+      phone,
+      location,
+      category,
+    } = req.body
+    category = "electricity"
 
     let status =
       description && address && image && userId && category ? true : false
@@ -21,9 +32,13 @@ exports.createComplaint = async (req, res) => {
 
     const result = await complaints.insertOne({
       userId: userId,
+      name: name,
+      location: location,
+      state: state,
+      phone: phone,
       description: description,
       address: address,
-      image: image,
+      imageUrl: imageUrl,
       category: category,
       status: 0,
       employeeId: null,

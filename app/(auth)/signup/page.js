@@ -55,10 +55,10 @@ export default function Home() {
       }
       console.log(newData)
       let result = await registerUser(newData)
-
+      console.log(result)
       if (!result) throw new Error("Registration failed")
     } catch (error) {
-      console.log(error)
+      console.log("Frontend Stage: ", error)
       reset()
       setError("afterSubmit", {
         ...error,

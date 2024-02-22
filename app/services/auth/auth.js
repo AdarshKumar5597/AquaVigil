@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { toast } from "react-hot-toast"
 
 import { authEndpoints } from "../api"
@@ -37,6 +37,7 @@ export const loginUser = async (data) => {
 export const registerUser = async (data) => {
   const toastId = toast.loading("Registering...")
   try {
+    console.log("From api : ", data)
     const response = await apiConnector("POST", REGISTER_API, data)
     console.log("Register response: ", response)
 
@@ -54,6 +55,7 @@ export const registerUser = async (data) => {
   } catch (error) {
     toast.dismiss(toastId)
     toast.error("Registration api error")
+    console.log("From API: ", error)
     return {
       result: error.message,
       success: false,

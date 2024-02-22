@@ -17,6 +17,7 @@ export const createComplaint = async (token, data) => {
       success: true,
     }
   } catch (error) {
+    console.log("Create Complaint Error: ", error)
     return {
       result: error.message,
       success: false,

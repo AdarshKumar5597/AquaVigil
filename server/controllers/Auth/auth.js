@@ -12,6 +12,7 @@ const signToken = (userId) => jwt.sign({ userId }, process.env.JWT_SECRET)
 exports.register = async (req, res) => {
   try {
     const { name, email, password, location, phone } = req.body
+    console.log(req.body)
     req.body.type = "user"
     if (!name || !email || !password || !location || !phone) {
       return res.status(400).json({
@@ -21,7 +22,7 @@ exports.register = async (req, res) => {
     }
 
     req.body.password = await bcrypt.hash(req.body.password, 12)
-
+    console.log(req.body.password)
     const client = getClient()
     const User = client.db().collection(UserDb)
     const exist_user = await User.findOne({ email: email })
@@ -33,7 +34,7 @@ exports.register = async (req, res) => {
       })
     } else {
       const new_user = await User.insertOne(req.body)
-      console.log(new_user)
+      console.log("GG: ", new_user)
       req.userId = new_user._id
 
       return res.status(200).json({
@@ -124,7 +125,7 @@ exports.login = async (req, res) => {
 
 exports.protect = async (req, res, next) => {
   const { authorization } = req.headers
-  const token = null
+  let token = null
   if (authorization && authorization.startsWith("Bearer"))
     token = authorization.split(" ")[1]
   else token = req.cookies.jwt
@@ -137,11 +138,12 @@ exports.protect = async (req, res, next) => {
   }
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
+  console.log("Protect:", decoded)
 
   const client = getClient()
   const User = client.db().collection(UserDb)
 
-  const user = await User.findOne({ _id: ObjectId(decoded.userId) })
+  const user = await User.findOne({ _id: new ObjectId(decoded.userId) })
 
   if (!user) {
     return res.status(401).json({

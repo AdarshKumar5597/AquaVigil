@@ -6,11 +6,11 @@ import { useSelector } from "react-redux"
 import { useState } from "react"
 import GoogleMaps from "@/app/components/LocationPicker"
 import { createComplaint } from "@/app/services/operationUser/createComplaint"
-import { uploadImage } from "@/app/services/users/imageUpload";
+import { uploadImage } from "@/app/services/users/imageUpload"
 const ComplaintForm = () => {
-  const [locationFieldActive, setLocationFieldActive] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
-  const [imageURL, setImageURL] = useState("");
+  const [locationFieldActive, setLocationFieldActive] = useState(false)
+  const [imageFile, setImageFile] = useState(null)
+  const [imageURL, setImageURL] = useState("")
   const [fetchedLocation, setFetchedLocation] = useState({
     success: false,
     data: "",
@@ -23,23 +23,22 @@ const ComplaintForm = () => {
   const { errors } = formState
 
   const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    console.log("Uploaded file:", file);
-    const imageResult = await uploadImage(file);
-    console.log(imageResult);
+    const file = e.target.files[0]
+    console.log("Uploaded file:", file)
+    const imageResult = await uploadImage(file)
+    console.log(imageResult)
     setImageURL(imageResult.imageUrl)
-    console.log(imageResult.imageUrl);
-    setImageFile(file);
-  };
+    console.log(imageResult.imageUrl)
+    setImageFile(file)
+  }
 
   const onSubmit = async (data) => {
-
     if (!imageURL) {
-      console.log("Image not uploaded");
-      return;
+      console.log("Image not uploaded")
+      return
     }
 
-    console.log(data);
+    console.log(data)
 
     const newData = {
       name: data.name,
@@ -49,8 +48,8 @@ const ComplaintForm = () => {
       description: data.description,
       location: fetchedLocation.latlng,
       imageUrl: imageURL,
-    };
-
+    }
+    console.log(newData)
     const result = await createComplaint(token, newData)
     if (!result) return console.log("Complaint not created")
     console.log(newData)
@@ -205,7 +204,9 @@ const ComplaintForm = () => {
         </div>
         <div className=" w-[46vw] h-screen">
           <div className="flex flex-col items-center justify-center h-[100%]">
-            <p className="text-[#3A4264] mb-3 text-xl">{imageURL ? "Image Uploaded Successfully" : "Upload Image"}</p>
+            <p className="text-[#3A4264] mb-3 text-xl">
+              {imageURL ? "Image Uploaded Successfully" : "Upload Image"}
+            </p>
 
             {locationFieldActive ? (
               <GoogleMaps setFetchedLocation={setFetchedLocation} />
@@ -213,7 +214,7 @@ const ComplaintForm = () => {
               <>
                 <label htmlFor="file-upload">
                   <Image
-                    src={ imageURL ? imageURL :"/upload_img.svg"}
+                    src={imageURL ? imageURL : "/upload_img.svg"}
                     alt="Google Logo"
                     className="w-[33vw] h-[52vh]"
                     width={5}
